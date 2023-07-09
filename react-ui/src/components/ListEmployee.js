@@ -1,5 +1,6 @@
 import React from "react"
 import EmployeeService from "../services/EmployeeService"
+import { Link } from "react-router-dom"
 
 export default function ListEmployee() {
 
@@ -13,7 +14,7 @@ export default function ListEmployee() {
     //         <td>{employee.email}</td>
     //     </tr>)
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         EmployeeService.getAllEmployee().then(res => {
             setEmployee(res.data)
             console.log(res.data)
@@ -25,6 +26,7 @@ export default function ListEmployee() {
     return (
         <div className="container">
             <h1 className="text-center">List Employee</h1>
+            <Link to="/add-employee" className="btn btn-primary mb-2">Add Employee</Link>
             <table className="table tabel-bordered table-stripped">
                 <thead>
                     <th>Employee Id</th>

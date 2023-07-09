@@ -1,12 +1,11 @@
 package com.jasmine.dev.springreact.controller;
 
 import com.jasmine.dev.springreact.entity.Employee;
+import com.jasmine.dev.springreact.exceptionhandler.RecordNotFoundException;
 import com.jasmine.dev.springreact.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +19,15 @@ public class EmployeeController {
     @GetMapping("/all")
     public List<Employee> getAllEmployee(){
         return employeeRepository.findAll();
+    }
+    @PostMapping("/new")
+    public Employee createNewEmployee(@RequestBody  Employee employee){
+        return employeeRepository.save(employee);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
+        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Employee with "+id+" does not exists"));
+        return ResponseEntity.ok(employee);
     }
 }

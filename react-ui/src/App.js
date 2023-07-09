@@ -3,6 +3,7 @@ import './App.css';
 import ListEmployee from './components/ListEmployee';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import AddEmployee from './components/AddEmployee';
 
 function App() {
   return (
@@ -11,10 +12,11 @@ function App() {
         <Header />
         <div className="container">
           <Routes>
-            <Route exact path="/" element={<ListEmployee />}/>
-            <Route exact path="/api/v1/employees/all" element={<ListEmployee />}/>
+            <Route path="/" exact element={<ListEmployee/>} />
+            <Route path="/employees" element={<ListEmployee/>}/>
+            <Route path="/add-employee" element={<AddEmployee/>}/>
+            <Route path="*" element={<ListEmployee/>}/>
           </Routes>
-          
         </div>
         <Footer />
       </Router>
