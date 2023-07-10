@@ -1,5 +1,5 @@
 import React from "react"
-import {Link, useNavigate}  from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import EmployeeService from "../services/EmployeeService"
 
 export default function AddEmployee() {
@@ -7,19 +7,44 @@ export default function AddEmployee() {
     const [firstName, setFirstName] = React.useState("")
     const [lastName, setLastName] = React.useState("")
     const [email, setEmail] = React.useState("")
+
     const navigate = useNavigate()
 
+    const { id } = useParams();
 
     const submitEmployeeData = (e) => {
         e.preventDefault()
 
-        const employee = {firstName, lastName, email}
+        const employee = { firstName, lastName, email }
 
-        console.log(employee);
-        EmployeeService.createEmployee(employee).then(res => {
-            console.log(res.data)
-            navigate("/employees")
+        if (id) {
+            EmployeeService.updateEmployee(id, employee).then((res) => {
+                navigate("/employees")
+            }).catch(error => console.log(error))
+
+        } else {
+            // console.log(employee);
+            EmployeeService.createEmployee(employee).then(res => {
+                console.log(res.data)
+                navigate("/employees")
+            }).catch(error => console.log(error))
+        }
+    }
+
+    React.useEffect(() => {
+        EmployeeService.getEmployeeById(id).then((res) => {
+            setFirstName(res.data.firstName)
+            setLastName(res.data.lastName)
+            setEmail(res.data.email)
         }).catch(error => console.log(error))
+    }, [])
+
+    const title = () => {
+        if (id) {
+            return <h2 className="text-center">Update Employee</h2>
+        } else {
+            return <h2 className="text-center">Add Employee</h2>
+        }
     }
 
     return (
@@ -30,7 +55,7 @@ export default function AddEmployee() {
             <div className="container">
                 <div className="row">
                     <div className="card col-md-6 offset-md-3 offset-md-3">
-                        <h2 className="text-center">Add Employee</h2>
+                        {title()}
                         <div className="card-body">
                             <form>
                                 <div className="form-group mb-2">
